@@ -1,7 +1,7 @@
 (ns kromatik.core)
 
 (defmulti ->ns-map
-  (fn [_ x] (coll? x)))
+  (fn [_ x] (map? x)))
 
 (defn find-nsk [paths k]
   (when-not (empty? paths)
