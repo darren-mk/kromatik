@@ -1,14 +1,52 @@
 # kromatik
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure library designed to converts between namespaced map and unnamespaced map.
 
 ## Usage
 
-FIXME
+```clojure
+(:require
+   [kromatik.core :as km])
+```
+
+### A single namespace is given for entire map
+
+```clojure
+(km/->ns-map {:a 1 :b 2} :hello)
+=> #:hello{:a 1, :b 2}
+```
+
+### A detailed paths for different namespaces is given
+
+```clojure
+(km/->ns-map
+    {:a 1 :b 2}
+    {:hello #{:a}
+     :bye #{:b}})
+=> {:hello/a 1, :bye/b 2}
+
+(km/->ns-map
+     {:a 1 :b 2}
+     {:hello #{:a :x :y :z}
+      :bye #{:b}})
+=>  {:hello/a 1, :bye/b 2}
+```
+
+### turn namespaced map into unnamespaced map
+
+```clojure
+(km/->bare-map
+    {:xyz/a 1 :zyx/b 2})
+=> {:a 1 :b 2}
+
+(km/->bare-map
+    {:xyz/a 1 :b 2})
+=> {:a 1 :b 2}
+```
 
 ## License
 
-Copyright © 2024 FIXME
+Copyright © 2024
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
