@@ -1,30 +1,26 @@
 (ns kromatik.core)
 
-(defmulti ->ns-map
-  (fn [_ x] (map? x)))
+(defn combine [k1 k2]
+  (keyword (name k1) (name k2)))
 
-(defn find-nsk [paths k]
+(defn pick [paths k]
   (when-not (empty? paths)
     (let [[path-nsk path-vals] (first paths)]
       (if (contains? path-vals k)
         path-nsk
-        (find-nsk (rest paths) k)))))
+        (pick (rest paths) k)))))
+
+(defmulti ->ns-map
+  (fn [_ x] (map? x)))
 
 (defmethod ->ns-map true
   [m paths]
-  (let [fmt (fn [k]
-              (let [nsk (find-nsk paths k)]
-                (keyword (str (name nsk) "/" (name k)))))
-        comb (fn [acc [k v]] (assoc acc (fmt k) v))]
-    (reduce comb {} m)))
+  (let [fmt #(combine (pick paths %) %)]
+    (update-keys m fmt)))
 
 (defmethod ->ns-map false
-  [m nsk]
-  (let [fmt (fn [k] (keyword (str (name nsk) "/" (name k))))
-        comb (fn [acc [k v]] (assoc acc (fmt k) v))]
-    (reduce comb {} m)))
+  [m k-ns]
+  (update-keys m (partial combine k-ns)))
 
 (defn ->bare-map [m]
-  (let [fmt (fn [k] (-> k name keyword))
-        comb (fn [acc [nsk v]] (assoc acc (fmt nsk) v))]
-    (reduce comb {} m)))
+  (update-keys m (comp keyword name)))

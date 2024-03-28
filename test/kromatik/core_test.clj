@@ -3,17 +3,21 @@
    [clojure.test :as t]
    [kromatik.core :as src]))
 
-(t/deftest find-nsk-test
+(t/deftest combine-test
+  (t/is
+   (= :abc/def (src/combine :abc :def))))
+
+(t/deftest pick-test
   (t/testing "sought key exists in path vals"
     (t/is
      (= :abc
-        (src/find-nsk {:abc #{:a :b}
-                       :def #{:c :d}} :a))))
+        (src/pick {:abc #{:a :b}
+                   :def #{:c :d}} :a))))
   (t/testing "sought key not exists in path vals"
     (t/is
      (nil?
-      (src/find-nsk {:abc #{:a :b}
-                     :def #{:c :d}} :y)))))
+      (src/pick {:abc #{:a :b}
+                 :def #{:c :d}} :y)))))
 
 (t/deftest ->ns-map-test
   (t/testing "single ns key is given"
