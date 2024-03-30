@@ -4,8 +4,12 @@
    [kromatik.core :as src]))
 
 (t/deftest combine-test
-  (t/is
-   (= :abc/def (src/combine :abc :def))))
+  (t/testing "both are keywords"
+    (t/is
+     (= :abc/def (src/combine :abc :def))))
+  (t/testing "k1 is nil"
+    (t/is
+     (= :def (src/combine nil :def)))))
 
 (t/deftest pick-test
   (t/testing "sought key exists in path vals"
@@ -37,7 +41,18 @@
         (src/->ns-map
          {:a 1 :b 2}
          {:hello #{:a :x :y :z}
-          :bye #{:b}})))))
+          :bye #{:b}}))))
+   (t/testing "correct detailed but some missing"
+    (t/is
+     (= {:hello/a 1, :bye/b 2 :c 3}
+        (src/->ns-map
+         {:a 1 :b 2 :c 3}
+         {:hello #{:a :x :y :z}
+          :bye #{:b}}))))
+  (t/testing "unexpected target value is given"
+    (t/is
+     (nil? (src/->ns-map
+            {:a 1 :b 2 :c 3} [1 2 3])))))
 
 (t/deftest ->bare-map-test
   (t/testing "all given keys are namespace"
