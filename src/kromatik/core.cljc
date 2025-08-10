@@ -1,4 +1,12 @@
-(ns kromatik.core)
+(ns kromatik.core
+  #?(:cljs (:refer-clojure :exclude [update-keys])))
+
+#?(:cljs
+   (defn update-keys [m f]
+     (into {}
+           (map (fn [[k v]]
+                  [(f k) v])
+                m))))
 
 (defn combine [k1 k2]
   (if k1
