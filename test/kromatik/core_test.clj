@@ -55,12 +55,12 @@
             {:a 1 :b 2 :c 3} [1 2 3])))))
 
 (t/deftest ->bare-map-test
-  (t/testing "all given keys are namespace"
+  (t/testing "all given keys are namespaced"
     (t/is
      (= {:a 1 :b 2}
         (src/->bare-map
          {:xyz/a 1 :zyx/b 2}))))
-  (t/testing "some given keys are namespace"
+  (t/testing "some given keys are namespaced"
     (t/is
      (= {:a 1 :b 2}
         (src/->bare-map
