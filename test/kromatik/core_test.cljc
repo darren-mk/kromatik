@@ -1,6 +1,8 @@
 (ns kromatik.core-test
+  #?(:cljs (:require-macros [cljs.test :as t]))
   (:require
-   [clojure.test :as t]
+   #?(:clj [clojure.test :as t]
+      :cljs [cljs.test :as t])
    [kromatik.core :as src]))
 
 (t/deftest combine-test
